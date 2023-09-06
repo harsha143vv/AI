@@ -1,0 +1,8 @@
+person(john, date(1990, 5, 15)).
+person(lisa, date(1985, 9, 20)).
+person(mary, date(1995, 3, 10)).
+person(james, date(1980, 7, 5)).
+date_of_birth(Name, DOB) :-
+    person(Name, DOB).
+born_after_year(Year, Names) :-
+    findall(Name, (person(Name, date(Y, _, _)), Y > Year), Names).
