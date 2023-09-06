@@ -1,0 +1,10 @@
+planets(mercury).
+planets(mars).
+planets(uranus).
+planets(venus).
+planets(jupiter).
+planets(saturn).
+planets(earth).
+planets(neptune).
+get_planets(Planet):-
+planets(Planet).
