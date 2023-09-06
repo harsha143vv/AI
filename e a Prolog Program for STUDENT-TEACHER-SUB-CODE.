@@ -1,0 +1,4 @@
+Student(reena,smith,math101).
+student(jeevan,doe,english).
+student(babu,antony,history).
+ get_student(Name,Teacher,Subject):- student(Name,Teacher,Subject).
