@@ -1,0 +1,43 @@
+min_elem([X|Xs], Min) :-
+    min_elem(Xs, X, Min).
+min_elem([], Min, Min).
+min_elem([X|Xs], MinSoFar, Min) :-
+    X < MinSoFar,
+    min_elem(Xs, X, Min).
+min_elem([X|Xs], MinSoFar, Min) :-
+    X >= MinSoFar,
+    min_elem(Xs, MinSoFar, Min).
+best_first_search(Graph, Start, Goal, Path) :-
+    bfs([[Start]], Goal, Path, Graph).
+bfs([[Goal|RestPath]|_], Goal, Path, _) :-
+    reverse([Goal|RestPath], Path).
+bfs([Path|Paths], Goal, FinalPath, Graph) :-
+    expand(Path, NewPaths, Graph),
+    append(Paths, NewPaths, UpdatedPaths),
+    sort_paths(UpdatedPaths, SortedPaths), 
+    bfs(SortedPaths, Goal, FinalPath, Graph).
+expand([Node|Path], NewPaths, Graph) :-
+    findall([Neighbor, Node|Path], (member([Node, Neighbor, _], Graph), not(member(Neighbor, Path))), NewPaths).
+sort_paths(Paths, SortedPaths) :-
+    predsort(compare_cost, Paths, SortedPaths).
+compare_cost(Result, Path1, Path2) :-
+    cost(Path1, Cost1),
+    cost(Path2, Cost2),
+    (Cost1 < Cost2 -> Result = '<'; Cost1 > Cost2 -> Result = '>'; Result = '=').
+cost(Path, Cost) :-
+    reverse(Path, ReversedPath),
+    path_cost(ReversedPath, Cost).
+path_cost([_], 0).
+path_cost([Node1, Node2|RestPath], Cost) :-
+    edge_cost(Node1, Node2, EdgeCost),
+    path_cost([Node2|RestPath], RestCost),
+    Cost is EdgeCost + RestCost.
+graph([
+    [a, b, 4],
+    [a, c, 2],
+    [b, d, 5],
+    [c, e, 3],
+    [d, f, 6],
+    [e, f, 1]
+]).
+
